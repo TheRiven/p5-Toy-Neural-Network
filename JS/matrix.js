@@ -135,3 +135,4 @@ class Matrix {
         console.table(this.data);
     }
 }
+module.exports = Matrix;
