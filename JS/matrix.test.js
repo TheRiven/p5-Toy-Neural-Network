@@ -20,3 +20,19 @@ test('Adding scalar to a matrix', () => {
         rows: 3
     });
 });
+test('Testing the Mapping Function with a simple addition', () => {
+    let m = new matrixJS(2, 2);
+    m.data[0] = [1, 2];
+    m.data[1] = [3, 4];
+    m.map((x) => {
+        return x + 1;
+    });
+    expect(m).toEqual({
+        data: [
+            [2, 3],
+            [4, 5]
+        ],
+        cols: 2,
+        rows: 2
+    });
+});
