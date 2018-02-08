@@ -1,0 +1,21 @@
+{
+  "name": "p5_neural_network",
+  "version": "1.0.0",
+  "description": "JavaScript Neural Network tutorial from coding train",
+  "main": "XOR-Test.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "James Parkes",
+  "license": "MIT",
+  "dependencies": {
+    "@types/jest": "^22.1.1",
+    "@types/node": "^9.4.1",
+    "express": "^4.16.2",
+    "p5": "^0.5.16"
+  },
+  "devDependencies": {
+    "jest": "^22.2.1",
+    "typescript": "^2.6.2"
+  }
+}
