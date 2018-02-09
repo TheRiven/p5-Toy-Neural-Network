@@ -36,3 +36,38 @@ test('Testing the Mapping Function with a simple addition', () => {
         rows: 2
     });
 });
+test('Testing the matrix transpose function', () => {
+    let m = new matrixJS(2, 2);
+    m.data[0] = [1, 2];
+    m.data[1] = [3, 4];
+    let m2 = matrixJS.transpose(m);
+    expect(m2).toEqual({
+        data: [
+            [1, 3],
+            [2, 4]
+        ],
+        cols: 2,
+        rows: 2
+    });
+});
+test('Test Matrix to Array conversion', () => {
+    let m = new matrixJS(2, 2);
+    m.data[0] = [1, 2];
+    m.data[1] = [3, 4];
+    let a = matrixJS.toArray(m);
+    expect(a).toEqual([1, 2, 3, 4]);
+});
+test('Test Array to Matrix conversion', () => {
+    let a = [1, 2, 3, 4];
+    let m = matrixJS.fromArray(a);
+    expect(m).toEqual({
+        data: [
+            [1],
+            [2],
+            [3],
+            [4]
+        ],
+        cols: 1,
+        rows: 4
+    });
+});
