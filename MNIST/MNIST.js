@@ -127,7 +127,7 @@ function testUserDigit() {
     img.loadPixels();
 
     for (let i = 0; i < 784; i++) {
-        inputs[i] = img.pixels[i * 4];
+        inputs[i] = img.pixels[i * 4] / 255;
     }
 
     let prediction = network.feedforward(inputs);
