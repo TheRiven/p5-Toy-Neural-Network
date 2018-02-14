@@ -1,0 +1,51 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
+  <script language="javascript" type="text/javascript" src="../libraries/p5/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="../libraries/p5/p5.dom.js"></script>
+  <script language="javascript" type="text/javascript" src="../JS/matrix.js"></script>
+  <script language="javascript" type="text/javascript" src="../JS/nn.js"></script>
+  <script language="javascript" type="text/javascript" src="./MNIST.js"></script>
+  <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
+
+  <!-- This line removes any default padding and style. 
+       You might only need one of these values set. -->
+  <style> 
+    body {padding: 0; margin: 0;} 
+    .stuff {
+      font-size: 64pt;
+    }
+
+    .correct {
+      color : #00CC00;
+    }
+
+    .wrong {
+      color: #CC0000;
+    }
+  
+  </style>
+</head>
+
+<body>
+
+  <div id="container"></div>
+
+  <p id="info">
+    Label: <span class="stuff" id="label"></span>
+    Guess: <span class="stuff" id="guess"></span><br>
+    Correct: <span id="rate"></span>
+  </p>
+
+  <p id="info">
+      User Guess: <span class="stuff" id="user_guess"></span>
+  </p>
+
+  <p id="info">
+    Testing: <span class="stuff" id="percent"></span>
+  </p>
+
+</body>
+</html>

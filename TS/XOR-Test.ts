@@ -1,4 +1,4 @@
-let network : NeuralNetwork;
+let network: NeuralNetwork;
 
 let training_data = [
     {
@@ -21,16 +21,14 @@ let training_data = [
 
 let lr_slider;
 
-function setup() 
-{
+function setup() {
     createCanvas(400, 400);
     network = new NeuralNetwork(2, 2, 1);
 
     lr_slider = createSlider(0.01, 0.1, 0.05, 0.01);
 }
 
-function draw() 
-{
+function draw() {
     background(0);
 
     network.learning_rate = lr_slider.value();
@@ -57,7 +55,7 @@ function draw()
             fill(color);
             noStroke();
             rect(x, y, resolution, resolution);
-        }    
+        }
     }
 
 }
