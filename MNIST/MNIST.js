@@ -34,7 +34,7 @@ let user_digit;
 
 function setup() {
     createCanvas(400, 200).parent('container');
-    network = new NeuralNetwork(784, 16, 10);
+    network = new NeuralNetwork(784, 64, 10);
     LoadMNIST();
     user_digit = createGraphics(200, 200);
     user_digit.pixelDensity(1);
@@ -46,22 +46,23 @@ function draw() {
     background(0);
 
     // Test the digit drawn by the user with the network
-    let user = testUserDigit();
+    testUserDigit();
 
     // If all the MNIST data has been loaded start runing tests
     if (training_images && training_labels && testing_images && testing_labels) {
 
         // Run in batches and only display the image on the last data set of the batch
-        let total = 10;
-        for (let i = 0; i < total; i++) {
-            if (i == total - 1) {
+        let trainBatch = 10;
+        for (let i = 0; i < trainBatch; i++) {
+            if (i == trainBatch - 1) {
                 train(true);
             } else {
                 train(false);
             }
         }
 
-        for (let i = 0; i < total; i++) {
+        let testBatch = 50;
+        for (let i = 0; i < testBatch; i++) {
             testing();        
         }
         
@@ -108,7 +109,14 @@ function testing() {
 
     select('#percent').html(nf(percentCorrect, 2, 2));
     
-    test_index = (test_index + 1) % testing_labels.length;
+    test_index++;
+    if (test_index == testing_labels.length){
+        test_index = 0;
+        console.log("Finished test set");
+        console.log(percentCorrect);
+        total_tests = 0;
+        total_correct = 0;
+    }
 }
 
 function testUserDigit() {
@@ -169,7 +177,7 @@ function train(show) {
     select('#guess').html(guess);
 
     if (correct_guesses > 0) {
-        select('#rate').html((correct_guesses / train_index) * 100);
+        select('#rate').html(nf((correct_guesses / train_index) * 100, 2, 2));
     }
     else {
         select('#rate').html('0');
