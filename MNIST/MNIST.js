@@ -1,17 +1,35 @@
+/*global 
+background createCanvas NeuralNetwork createGraphics createImage
+mouseX mouseY pmouseX pmouseY mouseIsPressed image key select
+nf
+*/
+
+// MNIST Data Vars
 let training_images;
 let training_labels;
 let testing_images;
 let testing_labels;
 
+// MNIST data paths
 const training_images_filename = 'train-images.idx3-ubyte'
 const training_labels_filename = 'train-labels.idx1-ubyte'
 const testing_images_filename = 't10k-images.idx3-ubyte'
 const testing_labels_filename = 't10k-labels.idx1-ubyte'
 
-let train_index = 0;
-let correct_guesses = 0;
+// Neural Network
 let network;
 
+// Training Vars
+let train_index = 0;
+let correct_guesses = 0;
+let train_image;
+
+// Testing Vars
+let test_index = 0;
+let total_tests = 0;
+let total_correct = 0;
+
+// User input test image
 let user_digit;
 
 function setup() {
@@ -20,32 +38,77 @@ function setup() {
     LoadMNIST();
     user_digit = createGraphics(200, 200);
     user_digit.pixelDensity(1);
+
+    train_image = createImage(28, 28);
 }
 
 function draw() {
     background(0);
 
+    // Test the digit drawn by the user with the network
     let user = testUserDigit();
 
+    // If all the MNIST data has been loaded start runing tests
     if (training_images && training_labels && testing_images && testing_labels) {
-        for (let i = 0; i < 10; i++) {
-            train();
-        }        
+
+        // Run in batches and only display the image on the last data set of the batch
+        let total = 10;
+        for (let i = 0; i < total; i++) {
+            if (i == total - 1) {
+                train(true);
+            } else {
+                train(false);
+            }
+        }
+
+        for (let i = 0; i < total; i++) {
+            testing();        
+        }
+        
     }
 
+    // Display the editable image for the user
     image(user_digit, 0, 0);
 
-    if (mouseIsPressed){
-        user_digit.fill(255);
+    if (mouseIsPressed) {
         user_digit.stroke(255);
-        user_digit.ellipse(mouseX, mouseY, 16);
+        user_digit.strokeWeight(16);
+        user_digit.line(mouseX, mouseY, pmouseX, pmouseY);
     }
 }
 
+// Check if the spacebar has been pressed and reset the user image if it has
 function keyPressed() {
     if (key == ' ') {
         user_digit.background(0);
     }
+}
+
+function testing() {
+    let inputs = [];    
+
+    for (let i = 0; i < 784; i++) {
+        let col = testing_images[i + test_index * 784];
+        inputs[i] = col / 255;
+    }
+
+    // Do the Neural network stuff...
+    let label = testing_labels[test_index];
+
+    let prediction = network.feedforward(inputs);
+    let guess = findMax(prediction);
+
+    total_tests++;
+
+    if (guess == label) {
+        total_correct++;
+    }
+
+    let percentCorrect = (total_correct / total_tests) * 100;
+
+    select('#percent').html(nf(percentCorrect, 2, 2));
+    
+    test_index = (test_index + 1) % testing_labels.length;
 }
 
 function testUserDigit() {
@@ -67,32 +130,37 @@ function testUserDigit() {
     return img;
 }
 
-function train() {
+function train(show) {
     let inputs = [];
 
-    let img = createImage(28, 28);
-    img.loadPixels();
-
-    for (let i = 0; i < 784; i++) {
-        let index = i * 4;
-        let col = training_images[i + train_index * 784];
-        inputs[i] = col / 255;
-        img.pixels[index + 0] = col;
-        img.pixels[index + 1] = col;
-        img.pixels[index + 2] = col;
-        img.pixels[index + 3] = 255;
+    if (show) {
+        train_image.loadPixels();
     }
 
-    img.updatePixels();
+    for (let i = 0; i < 784; i++) {
+        let col = training_images[i + train_index * 784];
+        inputs[i] = col / 255;
 
-    image(img, 200, 0, 200, 200);
+        if (show) {
+            let index = i * 4;
+            train_image.pixels[index + 0] = col;
+            train_image.pixels[index + 1] = col;
+            train_image.pixels[index + 2] = col;
+            train_image.pixels[index + 3] = 255;
+        }
+    }
+
+    if (show) {
+        train_image.updatePixels();
+        image(train_image, 200, 0, 200, 200);
+    }
 
     // Do the Neural network stuff...
     let label = training_labels[train_index];
     let targets = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     targets[label] = 1;
 
-    console.log(train_index);
+    //console.log(train_index);
 
     let prediction = network.feedforward(inputs);
     let guess = findMax(prediction);
@@ -107,8 +175,8 @@ function train() {
         select('#rate').html('0');
     }
 
-    network.train(inputs, targets); 
-    
+    network.train(inputs, targets);
+
     if (guess == label) {
         select('#info').class('correct');
         correct_guesses++;
@@ -116,7 +184,7 @@ function train() {
         select('#info').class('wrong');
     }
 
-    train_index++;
+    train_index = (train_index + 1) % training_labels.length;
 }
 
 function findMax(arr) {
