@@ -9,13 +9,13 @@
   "author": "James Parkes",
   "license": "MIT",
   "dependencies": {
-    "@types/jest": "^22.1.1",
-    "@types/node": "^9.4.1",
+    "@types/jest": "^22.1.2",
+    "@types/node": "^9.4.6",
     "express": "^4.16.2",
-    "p5": "^0.5.16"
+    "p5": "^0.6.0"
   },
   "devDependencies": {
-    "jest": "^22.2.1",
-    "typescript": "^2.6.2"
+    "jest": "^22.3.0",
+    "typescript": "^2.7.1"
   }
 }
